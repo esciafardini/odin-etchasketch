@@ -1,5 +1,6 @@
 (ns etch.core
-  (:require [goog.dom :as dom]))
+  (:require [goog.dom :as dom]
+            [goog.events :as events]))
 
 ;;find sketch div
 ;;generate 16 items inside of it with class grid-item
@@ -19,10 +20,21 @@
 
 (def sketch-div (.getElementById js/document "sketch"))
 
+#_(defn on-mouse-over [event]
+    (let [target (.-target event)]
+      (set! (.-style target) "background-color" "red")))
+
+#_(defn add-hover-listener []
+    (let [my-div (dom/getElement "my-div")]
+      (events/listen my-div "mouseover" on-mouse-over)))
+
+#_(add-hover-listener)
+
 (defn init []
-  #_(.appendChild (get-element-by-id "sketch") (.createElement js/document "div"))
-  (dotimes [x 64]
-    (let [new-div (.createElement js/document "div")
-          _ (set! (.. new-div -className) "grid-item")]
+  (dotimes [x (* 40 40)]
+    (let [new-div (.createElement js/document "div")]
+      (set! (.. new-div -className) "grid-item")
+      (.addEventListener new-div "mouseover"
+                         #(set! (.. new-div -style -backgroundColor) "white"))
       (.appendChild (get-element-by-id "sketch") new-div)))
   (console-log "initialized"))

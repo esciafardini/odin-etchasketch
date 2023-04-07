@@ -15,23 +15,16 @@ html, body {
   align-items: center;
 }
 
-.sketch
-{
-  border: 1px solid black;
+.grid {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  width: 500px;
+  height: 300px;
 }
 
-.grid
-{
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: repeat(8, 1fr);
-  grid-gap: 1px; /* Add a small gap between grid items for clarity */
-}
-
-.grid-item
-{
-  border: 1px solid black;
-  background-color: white; /* Set a background color for the grid items */
-  height: 30px; /* Set the height and width of the grid items */
-  width: 30px;
+.grid-item {
+  width: 10px;
+  height: 10px;
+  background-color: black;
 }
