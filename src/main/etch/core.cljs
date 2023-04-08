@@ -2,39 +2,21 @@
   (:require [goog.dom :as dom]
             [goog.events :as events]))
 
-;;find sketch div
-;;generate 16 items inside of it with class grid-item
+(defn event-target-value [e]
+  (.-value (.-target e)))
 
-(def console-log (.-log js/console))
+(defn set-sketch-zone! [n]
+  (dom/removeChildren (dom/getElement "sketch")) ;no-op on mount
+  (dotimes [_ (* n n)] ;read as 64x64
+    (let [new-div (dom/createElement "div")
+          item-width (/ 360 n)]
+      (set! (.. new-div -className) "grid-item")
+      (set! (.. new-div -style -width) (str item-width "px"))
+      (set! (.. new-div -style -height) (str item-width "px"))
+      (events/listen new-div "mouseover" #(set! (.. new-div -style -backgroundColor) "white"))
 
-(defn get-element-by-id [id]
-  (.getElementById js/document id))
-
-(defn set-text-content! [div-id text-content]
-  (let [div (get-element-by-id div-id)]
-    (set! (.. div -textContent) text-content)))
-
-(defn set-img-src! [div-id text]
-  (let [div (get-element-by-id div-id)]
-    (set! (.. div -src) text)))
-
-(def sketch-div (.getElementById js/document "sketch"))
-
-#_(defn on-mouse-over [event]
-    (let [target (.-target event)]
-      (set! (.-style target) "background-color" "red")))
-
-#_(defn add-hover-listener []
-    (let [my-div (dom/getElement "my-div")]
-      (events/listen my-div "mouseover" on-mouse-over)))
-
-#_(add-hover-listener)
+      (dom/appendChild (dom/getElement "sketch") new-div))))
 
 (defn init []
-  (dotimes [x (* 40 40)]
-    (let [new-div (.createElement js/document "div")]
-      (set! (.. new-div -className) "grid-item")
-      (.addEventListener new-div "mouseover"
-                         #(set! (.. new-div -style -backgroundColor) "white"))
-      (.appendChild (get-element-by-id "sketch") new-div)))
-  (console-log "initialized"))
+  (set! (.. (dom/getElement "my-dropdown") -onchange) #(set-sketch-zone! (event-target-value %)))
+  (set-sketch-zone! 180))
